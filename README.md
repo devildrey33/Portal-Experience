@@ -13,6 +13,7 @@ https://user-images.githubusercontent.com/15678544/222872383-c966976b-50e9-412a-
 This project uses vite as a build tool (https://vitejs.dev/guide/)... Im not an expert in build tools, before i started the three.js-journey i was using a windows apache server with xampp (yes im a bit prehistoric, its the age i think xd)
 
 You need run <code>npm install</code> once to get all dependencies
+
 And then you can use <code>npm run dev</code> to start the local test server.
 
 live example : https://devildrey33.es/Ejemplos/Three.js-Journey/39-Adding-details-to-the-scene/
