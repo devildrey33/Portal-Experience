@@ -10,6 +10,8 @@ Pourpose o this? have fun and learn a bit more.
 
 This project uses vite as a build tool...
 
+You need run 'npm install' once to get all dependencies
 <code>npm install</code>
 
+And then you can use 'npm run dev' to start the local test server.
 <code>npm run dev</code>
