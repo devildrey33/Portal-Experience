@@ -1,7 +1,7 @@
 # Portal-Experience
 This experience its based on https://threejs-journey.com/ chapter 6 Portal Scene 
 
-![portal scene2](https://user-images.githubusercontent.com/15678544/222872329-7d108718-3b19-4d32-a2b1-158316b0b654.jpg)
+https://user-images.githubusercontent.com/15678544/222872383-c966976b-50e9-412a-9b21-018dcc62d080.mp4
 
 - Uses my own model and texture
 - Has an extended portal fragment shader to make an initial animation for opening the portal
