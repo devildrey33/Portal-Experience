@@ -15,3 +15,6 @@ You need run 'npm install' once to get all dependencies
 
 And then you can use 'npm run dev' to start the local test server.
 <code>npm run dev</code>
+
+
+live example : https://devildrey33.es/Ejemplos/Three.js-Journey/39-Adding-details-to-the-scene/
