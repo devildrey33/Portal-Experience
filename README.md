@@ -1,5 +1,5 @@
 # Portal-Experience
-This experience its based on Three.js-Journey chapter 6 Portal Scene 
+This experience its based on https://threejs-journey.com/ chapter 6 Portal Scene 
 
 - Uses my own model and texture
 - Has an extended portal fragment shader to make an initial animation for opening the portal
