@@ -2,6 +2,8 @@ import Experience from '../Experience.js'
 import * as dat from 'lil-gui'
 
 export default class Debug {
+    // State of the debug class, if the url ends with "#debug" is true, else is false
+    active = window.location.hash === '#debug';
 
     defaultOptions = {
         clearColor              : "#201919",
@@ -14,14 +16,14 @@ export default class Debug {
         outherGlowStrength      : 12.5,
         outherGlowLimit         : 3.77,
         animationDelay          : 0.6,
-        animationSpeed          : 0.1,
+        animationSpeed          : (this.active === false) ? 1 : 0.1,
         colorWaveTime           : 1.2,
         colorWaveAmplitude      : 0.5
     };
     
-    constructor() {
-        this.active = window.location.hash === '#debug'
+    constructor() {        
         this.experience = new Experience();
+        console.log(this.defaultOptions.animationSpeed)
     }
 
     
@@ -54,11 +56,11 @@ export default class Debug {
             this.portalLightMaterial.uniforms.uPerlinNoiseStrength2.value = this.defaultOptions.perlinNoiseStrength2;
         });
         
-        this.debugPortal.add(this.defaultOptions, 'perlinNoiseTime1').min(0.01).max(1).step(0.001).onChange(() => {
+        this.debugPortal.add(this.defaultOptions, 'perlinNoiseTime1').min(0.01).max(3).step(0.001).onChange(() => {
             this.portalLightMaterial.uniforms.uPerlinNoiseTime1.value = this.defaultOptions.perlinNoiseTime1;
         });
         
-        this.debugPortal.add(this.defaultOptions, 'perlinNoiseTime2').min(0.01).max(1).step(0.001).onChange(() => {
+        this.debugPortal.add(this.defaultOptions, 'perlinNoiseTime2').min(0.01).max(4).step(0.001).onChange(() => {
             this.portalLightMaterial.uniforms.uPerlinNoiseTime2.value = this.defaultOptions.perlinNoiseTime2;
         });
         
