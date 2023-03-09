@@ -47,6 +47,7 @@ void main() {
     vec4 viewPosition       = viewMatrix        * modelPosition;
     vec4 projectionPosition = projectionMatrix  * viewPosition;
 
+    // Set the final position
     gl_Position = projectionPosition;
 
     // scale goes smaller when curTime reaches the end
