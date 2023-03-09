@@ -37,10 +37,11 @@ void main() {
     // distance from center x, y
     float rad = (clampTime * (aRadius * curTime * 0.5)) * 3.0;
 
+    // Rotate particles
     modelPosition.x = modelPosition.x + (cos(mod(360.0, aAngle + clampTime)) * rad * (curTime * 0.5));
     modelPosition.y = modelPosition.y + (sin(mod(360.0, aAngle + clampTime)) * rad * (curTime * 0.5));
 
-
+    // aRand ads a bit of random velocity for the particles
     modelPosition.z += 3.0 * (curTime * aScale * aRand);
 
     vec4 viewPosition       = viewMatrix        * modelPosition;
@@ -49,7 +50,7 @@ void main() {
     gl_Position = projectionPosition;
 
     // scale goes smaller when curTime reaches the end
-    float scale = ((aScale * clampTime) * 15.0) * curTime;
+    float scale = ((aScale * clampTime) * 15.0);
 
     // Adapt point size to pixel ratio and random scale
     gl_PointSize = uSize * scale * uPixelRatio;

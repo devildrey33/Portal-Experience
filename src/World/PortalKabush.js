@@ -45,7 +45,7 @@ export default class PortalKabush {
     
         for (let i = 0; i < this.kabushCount; i++) {
             const angle  = Math.random() * 360;
-            const radius = 0.1 + (Math.random() * 2);
+            const radius = 0.1 + (Math.random() * 0.55);
             
 /*            this.kabushPositionArray[i * 3 + 0] = this.portal2DMesh.position.x;
             this.kabushPositionArray[i * 3 + 1] = this.portal2DMesh.position.y;
