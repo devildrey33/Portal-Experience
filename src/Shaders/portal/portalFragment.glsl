@@ -143,8 +143,8 @@ void main() {
      vec3 color = mix (uColorStart, uColorEnd, strength * 0.75);
 
      // Insert a circle in top   
-     float s = .5 - step(distance(vUv, vec2(0.5)), 0.9);
-     color = vec3(color * s);
+//     float s = .5 - step(distance(vUv, vec2(0.5)), 0.9);
+//     color = vec3(color * s);
 //     color = vec3(circle(st, 0.01));
 
      gl_FragColor = vec4(color, 0.85);
