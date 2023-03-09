@@ -47,13 +47,13 @@ export default class PortalKabush {
             const angle  = Math.random() * 360;
             const radius = 0.1 + (Math.random() * 2);
             
-            this.kabushPositionArray[i * 3 + 0] = this.portal2DMesh.position.x;
+/*            this.kabushPositionArray[i * 3 + 0] = this.portal2DMesh.position.x;
             this.kabushPositionArray[i * 3 + 1] = this.portal2DMesh.position.y;
-            this.kabushPositionArray[i * 3 + 2] = this.portal2DMesh.position.z + 0.05; // from -1.75 to 1.75
+            this.kabushPositionArray[i * 3 + 2] = this.portal2DMesh.position.z + 0.05; // from -1.75 to 1.75*/
 
-            /*this.kabushPositionArray[i * 3 + 0] = this.portal2DMesh.position.x + (Math.cos(angle) * radius)
+            this.kabushPositionArray[i * 3 + 0] = this.portal2DMesh.position.x + (Math.cos(angle) * radius);
             this.kabushPositionArray[i * 3 + 1] = this.portal2DMesh.position.y + (Math.sin(angle) * radius);
-            this.kabushPositionArray[i * 3 + 2] = (this.portal2DMesh.position.z + 0.05) - (radius * 0.5)  // from -1.75 to 1.75*/
+            this.kabushPositionArray[i * 3 + 2] = (this.portal2DMesh.position.z + 0.05);  
     
             this.kabushScaleArray[i]  = Math.random();        
             this.kabushRandArray[i]   = Math.random();
