@@ -25,7 +25,7 @@ export default class Camera {
 
     setOrbitControls() {
         this.controls = new OrbitControls(this.instance, this.canvas);
-        this.controls.enableDamping = true;
+//        this.controls.enableDamping = true;
         // Limit the view angle to avoid position the camera under the ground
         this.controls.maxPolarAngle = Math.PI / 2 - 0.1;
 
