@@ -12,7 +12,7 @@ uniform float uColorWaveAmplitude;
 uniform float uAnimationDelay;
 uniform float uAnimationSpeed;
 
-varying vec2  vUv;
+varying vec2 vUv;
 
 //	Classic Perlin 3D Noise 
 //	by Stefan Gustavson
@@ -105,18 +105,8 @@ float cubic_bezier(float A, float B, float C, float D, float t) {
 }
 
 
-float circle(in vec2 _st, in float _radius){
-    vec2 dist = _st-vec2(0.5);
-	return 1.-smoothstep(_radius-(_radius*0.01),
-                         _radius+(_radius*0.01),
-                         dot(dist,dist)*4.0);
-}
-
-
 // Main
 void main() {
-     vec2 st = gl_FragCoord.xy/1000.0;
-
      // current time for cubic-bezier timeline, can go from 1.0 to 0.0
      float curTime =  1.0 - cubic_bezier(0.35, 1.45, 0.9, 1.0, clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0));
      // Max uOutherGlowStrength value
@@ -139,13 +129,11 @@ void main() {
      // Apply cool step
      strength =  strength + step(-0.1, strength) * 0.8; 
 
+     // Limit colors form 0 to 1
+//     strength = clamp(strength, -10.0, 12.0);
+
      // Final color
      vec3 color = mix (uColorStart, uColorEnd, strength * 0.75);
-
-     // Insert a circle in top   
-     float s = .5 - step(distance(vUv, vec2(0.5)), 0.9);
-     color = vec3(color * s);
-//     color = vec3(circle(st, 0.01));
 
      gl_FragColor = vec4(color, 0.85);
 }

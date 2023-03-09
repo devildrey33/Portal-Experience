@@ -32,13 +32,13 @@ void main() {
     // clampTime its 0 until uAnimationDelay its consumed, then goes from 0 to 1
     float clampTime = clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0);
     // current time for cubic-bezier timeline, can go from 0.01 to 1.9 to -0.01
-    float curTime =  cubic_bezier(0.0, 0.01, 1.4, -0.01, clampTime);
+    float curTime =  cubic_bezier(0.0, 0.7, 1.4, -0.01, clampTime);
     
     // distance from center x, y
-    float rad = (clampTime * (aRadius * curTime * 0.5)) * 1.1;
+    float rad = (clampTime * (aRadius * curTime * 0.5)) * 3.0;
 
-    modelPosition.x = modelPosition.x + (cos(mod(360.0, aAngle + clampTime)) * (curTime * 0.3));
-    modelPosition.y = modelPosition.y + (sin(mod(360.0, aAngle + clampTime)) * (curTime * 0.3));
+    modelPosition.x = modelPosition.x + (cos(mod(360.0, aAngle + clampTime)) * rad * (curTime * 0.5));
+    modelPosition.y = modelPosition.y + (sin(mod(360.0, aAngle + clampTime)) * rad * (curTime * 0.5));
 
 
     modelPosition.z += 3.0 * (curTime * aScale * aRand);
@@ -48,7 +48,8 @@ void main() {
 
     gl_Position = projectionPosition;
 
-    float scale = (aScale * clampTime) * 10.0;
+    // scale goes smaller when curTime reaches the end
+    float scale = ((aScale * clampTime) * 15.0) * curTime;
 
     // Adapt point size to pixel ratio and random scale
     gl_PointSize = uSize * scale * uPixelRatio;

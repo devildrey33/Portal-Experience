@@ -22,7 +22,8 @@ float cubic_bezier(float A, float B, float C, float D, float t) {
 void main() {
     // current time for cubic-bezier timeline, can go from 0.01 to 1.9 to -0.01
     float clampTime = clamp(((uTime - uAnimationDelay) * uAnimationSpeed), 0.0, 1.0);
-    float curTime =  cubic_bezier(0.0, 0.05, 1.9, -0.01, clampTime);
+//    float curTime =  cubic_bezier(0.0, 0.05, 1.9, -0.01, clampTime);
+    float curTime =  cubic_bezier(0.0, 0.7, 1.4, -0.01, clampTime);
 
     float distanceToCenter = distance(gl_PointCoord, vec2(0.5)) * 2.0;
     float strength = (0.05 / distanceToCenter - 0.1) * curTime;

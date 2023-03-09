@@ -29,8 +29,7 @@ export default class PortalKabush {
                 uPixelRatio             : { value : Math.min(window.devicePixelRatio, 2) },
                 uSize                   : { value : 50 },
                 uAnimationDelay         : { value : this.defaultOptions.animationDelay },
-                uAnimationSpeed         : { value : this.defaultOptions.animationSpeed },
-        
+                uAnimationSpeed         : { value : this.defaultOptions.animationSpeed },        
             },
             vertexShader    : kabushVertexShader,
             fragmentShader  : kabushFragmentShader
@@ -46,11 +45,15 @@ export default class PortalKabush {
     
         for (let i = 0; i < this.kabushCount; i++) {
             const angle  = Math.random() * 360;
-            const radius = 0.1 + (Math.random() * 0.5);
+            const radius = 0.1 + (Math.random() * 2);
             
-            this.kabushPositionArray[i * 3 + 0] = this.portal2DMesh.position.x + (Math.cos(angle) * radius)
+            this.kabushPositionArray[i * 3 + 0] = this.portal2DMesh.position.x ;
+            this.kabushPositionArray[i * 3 + 1] = this.portal2DMesh.position.y ;
+            this.kabushPositionArray[i * 3 + 2] = this.portal2DMesh.position.z + 0.05; // from -1.75 to 1.75
+
+/*            this.kabushPositionArray[i * 3 + 0] = this.portal2DMesh.position.x + (Math.cos(angle) * radius)
             this.kabushPositionArray[i * 3 + 1] = this.portal2DMesh.position.y + (Math.sin(angle) * radius);
-            this.kabushPositionArray[i * 3 + 2] = (this.portal2DMesh.position.z + 0.05) - (radius * 0.5)  // from -1.75 to 1.75
+            this.kabushPositionArray[i * 3 + 2] = (this.portal2DMesh.position.z + 0.05) - (radius * 0.5)  // from -1.75 to 1.75*/
     
             this.kabushScaleArray[i]  = Math.random();        
             this.kabushRandArray[i]   = Math.random();
@@ -74,7 +77,6 @@ export default class PortalKabush {
     // update the time on each frame adding delta time to ensure same result with diferent framerates
     update() {
         this.kabushMaretial.uniforms.uTime.value += this.time.delta;
-        console.log(this.kabushMaretial.uniforms.uTime.value)
     }
 
 }
