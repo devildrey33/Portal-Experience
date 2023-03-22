@@ -110,12 +110,20 @@ void main() {
 
      // current time for cubic-bezier timeline, can go from 1.0 to 0.0
      float curTime =  1.0 - cubic_bezier(0.35, 1.45, 0.9, 1.0, clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0));
+     // current time for cubic-bezier timeline, can go from 1.0 to 0.1
+     float curTime2 =  1.0 - cubic_bezier(0.0, 0.75, 1.0, 0.9, clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0));
      // Max uOutherGlowStrength value
      float OGSMax = (uOutherGlowStrength * 30.0);   
      // Set OutherGlowStrength value to cubic-bezier timeline
      float OutherGlowStrength = uOutherGlowStrength + (OGSMax * curTime);
+
+     // Insert a inverted circle with curTime radius as a transparent area
+     // This will make the portal appear from outside to the center
+     float dist = step(0.4, abs(distance(vUv, vec2(0.5)) - curTime2));
+     float alpha = (dist < 0.5) ? 0.85 : 0.0;
+
      // Make a wave for the dark part of the portal
-     float OutherGlowLimit = uOutherGlowLimit + (sin(uTime * uColorWaveTime) * uColorWaveAmplitude);
+     float OutherGlowLimit = uOutherGlowLimit + (sin(uTime * uColorWaveTime) * (uColorWaveAmplitude + curTime));
 
      // Displace uV (first perlin noise)
      vec2 displacedUv = vUv + cnoise(vec3(vUv * uPerlinNoiseStrength1, uTime * uPerlinNoiseTime1));
@@ -133,10 +141,6 @@ void main() {
      // Final color
      vec3 color = mix (uColorStart, uColorEnd, strength * 0.75);
 
-     // Insert a circle in top   
-//     float s = .5 - step(distance(vUv, vec2(0.5)), 0.9);
-//     color = vec3(color * s);
-//     color = vec3(circle(st, 0.01));
-
-     gl_FragColor = vec4(color, 0.85);
+     // Apply the color and the alpha channel
+     gl_FragColor = vec4(color, alpha);
 }

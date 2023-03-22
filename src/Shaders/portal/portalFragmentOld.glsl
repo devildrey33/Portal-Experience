@@ -1,3 +1,6 @@
+// OLD Fragment shader of the portal without the transparent inverted circle at the start
+
+
 uniform float uTime;
 uniform vec3  uColorStart;
 uniform vec3  uColorEnd;
@@ -12,7 +15,7 @@ uniform float uColorWaveAmplitude;
 uniform float uAnimationDelay;
 uniform float uAnimationSpeed;
 
-varying vec2 vUv;
+varying vec2  vUv;
 
 //	Classic Perlin 3D Noise 
 //	by Stefan Gustavson
@@ -107,6 +110,7 @@ float cubic_bezier(float A, float B, float C, float D, float t) {
 
 // Main
 void main() {
+
      // current time for cubic-bezier timeline, can go from 1.0 to 0.0
      float curTime =  1.0 - cubic_bezier(0.35, 1.45, 0.9, 1.0, clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0));
      // Max uOutherGlowStrength value
@@ -116,10 +120,10 @@ void main() {
      // Make a wave for the dark part of the portal
      float OutherGlowLimit = uOutherGlowLimit + (sin(uTime * uColorWaveTime) * uColorWaveAmplitude);
 
-     // Displace uV
+     // Displace uV (first perlin noise)
      vec2 displacedUv = vUv + cnoise(vec3(vUv * uPerlinNoiseStrength1, uTime * uPerlinNoiseTime1));
 
-     // Make Perlin noise
+     // Make second perlin noise for the strength
      float strength = cnoise(vec3(displacedUv * uPerlinNoiseStrength2, uTime * uPerlinNoiseTime2));
 
      // Outher glow                      5.0 =  external radius
@@ -127,13 +131,11 @@ void main() {
      strength += outherGlow;
 
      // Apply cool step
-     strength =  strength + step(-0.1, strength) * 0.8; 
-
-     // Limit colors form 0 to 1
-//     strength = clamp(strength, -10.0, 12.0);
+     strength = strength + step(-0.1, strength) * 0.8; 
 
      // Final color
      vec3 color = mix (uColorStart, uColorEnd, strength * 0.75);
+
 
      gl_FragColor = vec4(color, 0.85);
 }
