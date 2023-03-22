@@ -4,6 +4,8 @@ uniform float uAnimationSpeed;
 uniform vec3  uColorStart;
 uniform vec3  uColorEnd;
 
+varying float vVisible;
+
 
 /* Cubic bezier function from ChatGPT */
 float cubic_bezier(float A, float B, float C, float D, float t) {
@@ -30,5 +32,5 @@ void main() {
 
     vec3 color = mix(uColorStart, uColorEnd, clampTime);
 
-    gl_FragColor = vec4(color, strength);
+    gl_FragColor = vec4(color, strength * vVisible);
 }

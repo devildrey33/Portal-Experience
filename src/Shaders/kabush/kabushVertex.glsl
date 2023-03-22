@@ -9,6 +9,7 @@ attribute float aRand;
 attribute float aRadius;
 attribute float aAngle;
 
+varying float vVisible;
 
 
 /* Cubic bezier function from ChatGPT */
@@ -32,17 +33,19 @@ void main() {
     // clampTime its 0 until uAnimationDelay its consumed, then goes from 0 to 1
     float clampTime = clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0);
     // current time for cubic-bezier timeline, can go from 0.01 to 1.9 to -0.01
-    float curTime =  cubic_bezier(0.0, 0.7, 1.4, -0.01, clampTime);
+    float curTime =  cubic_bezier(0.0, 0.7, 1.4, -0.4, clampTime);
     
     // distance from center x, y
     float rad = (clampTime * (aRadius * curTime * 0.5)) * 3.0;
 
+    float modelZ = modelPosition.z;
+ 
     // Rotate particles
-    modelPosition.x = modelPosition.x + (cos(mod(360.0, aAngle + clampTime)) * rad * (curTime * 0.5));
-    modelPosition.y = modelPosition.y + (sin(mod(360.0, aAngle + clampTime)) * rad * (curTime * 0.5));
+    modelPosition.x = modelPosition.x + (cos(mod(360.0, aAngle + clampTime)) * rad * (curTime * .95));
+    modelPosition.y = modelPosition.y + (sin(mod(360.0, aAngle + clampTime)) * rad * (curTime * .95));
 
     // aRand ads a bit of random velocity for the particles
-    modelPosition.z += 3.0 * (curTime * aScale * aRand);
+    modelPosition.z += 4.0 * ((curTime * aScale * (aRand)) - (aRand * 0.1));
 
     vec4 viewPosition       = viewMatrix        * modelPosition;
     vec4 projectionPosition = projectionMatrix  * viewPosition;
@@ -58,4 +61,7 @@ void main() {
 
     // Size attenuation
     gl_PointSize *= (1.0 / - viewPosition.z);
+
+    vVisible = 0.0;
+    if (modelZ < modelPosition.z) vVisible = 1.0;
 }
