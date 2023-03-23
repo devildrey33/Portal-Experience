@@ -16,7 +16,7 @@ export default class Debug {
         outherGlowStrength      : 12.5,
         outherGlowLimit         : 3.77,
         animationDelay          : 0.6,
-        animationSpeed          : (this.active === false) ? 1 : 0.1,
+        animationSpeed          : (this.active === false) ? 0.8 : 0.2,
         colorWaveTime           : 1.2,
         colorWaveAmplitude      : 0.5
     };
@@ -85,12 +85,22 @@ export default class Debug {
         
         
         this.animateButton = { animate : () => { 
+            // Reset shader time
             this.portalLightMaterial.uniforms.uTime.value = 0; 
-            this.kabushMaretial.uniforms.uTime.value = 0; 
+            this.kabushMaretial.uniforms.uTime.value      = 0; 
+        }}        
+        this.debugPortalShow.add(this.animateButton, 'animate').name("Open StarGate");
+
+        this.animateButton2 = { animate2 : () => { 
+            // Set shader time to 1 minute, so the close animation starts
+            this.portalLightMaterial.uniforms.uTime.value = 60; 
+            this.kabushMaretial.uniforms.uTime.value      = 60; 
         }}
-        this.debugPortalShow.add(this.animateButton, 'animate').name("Animate StarGate");
-        this.debugPortalWaves = this.debugPortal.addFolder("Portal waves animation")
         
+        this.debugPortalShow.add(this.animateButton2, 'animate2').name("Close StarGate");
+
+
+        this.debugPortalWaves = this.debugPortal.addFolder("Portal waves animation")
         this.debugPortalWaves.add(this.defaultOptions, 'colorWaveTime').min(0.1).max(10).step(0.01).onChange(() => {
             this.portalLightMaterial.uniforms.uColorWaveTime.value = this.defaultOptions.colorWaveTime;
         });

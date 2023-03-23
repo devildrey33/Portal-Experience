@@ -105,25 +105,27 @@ float cubic_bezier(float A, float B, float C, float D, float t) {
 }
 
 
+#define CLOSE_TIME 60.0
+
 // Main
 void main() {
 
-     // current time for cubic-bezier timeline, can go from 1.0 to 0.0
+     // current time for cubic-bezier timeline closing animation, can go from 0.0 to 1.0
+     float curTimeClose = cubic_bezier(0.0, 0.75, 1.0, 1.0, clamp((uTime - CLOSE_TIME) * uAnimationSpeed * 2.0, 0.0, 1.0));
+
+
+     // current time for cubic-bezier timeline opening animation, can go from 1.0 to 0.0
      float curTime =  1.0 - cubic_bezier(0.35, 1.45, 0.9, 1.0, clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0));
-     // current time for cubic-bezier timeline, can go from 1.0 to 0.1
+     // current time for cubic-bezier timeline opening animation, can go from 1.0 to 0.1
      float curTime2 =  1.0 - cubic_bezier(0.0, 0.75, 1.0, 0.9, clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0));
      // Max uOutherGlowStrength value
      float OGSMax = (uOutherGlowStrength * 30.0);   
      // Set OutherGlowStrength value to cubic-bezier timeline
-     float OutherGlowStrength = uOutherGlowStrength + (OGSMax * curTime);
-
-     // Insert a inverted circle with curTime radius as a transparent area
-     // This will make the portal appear from outside to the center
-     float dist = step(0.4, abs(distance(vUv, vec2(0.5)) - curTime2));
-     float alpha = (dist < 0.5) ? 0.85 : 0.0;
+     float OutherGlowStrength = uOutherGlowStrength +  (OGSMax * curTime);
 
      // Make a wave for the dark part of the portal
      float OutherGlowLimit = uOutherGlowLimit + (sin(uTime * uColorWaveTime) * (uColorWaveAmplitude + curTime));
+     OutherGlowLimit = OutherGlowLimit * (1.0 +  (curTimeClose * 0.5));
 
      // Displace uV (first perlin noise)
      vec2 displacedUv = vUv + cnoise(vec3(vUv * uPerlinNoiseStrength1, uTime * uPerlinNoiseTime1));
@@ -131,12 +133,18 @@ void main() {
      // Make second perlin noise for the strength
      float strength = cnoise(vec3(displacedUv * uPerlinNoiseStrength2, uTime * uPerlinNoiseTime2));
 
-     // Outher glow                      5.0 =  external radius
+     // Outher glow                     
      float outherGlow = distance(vUv, vec2(0.5)) * OutherGlowStrength - OutherGlowLimit;
      strength += outherGlow;
 
      // Apply cool step
      strength = strength + step(-0.1, strength) * 0.8; 
+
+     // Insert a inverted circle with curTime radius as a transparent area
+     // This will make the portal appear from outside to the center
+     float dist = step(0.4, abs(distance(vUv, vec2(0.5)) - (curTime2 + curTimeClose)));
+     float alpha = (dist < 0.5) ? 0.85 : 0.0;
+
 
      // Final color
      vec3 color = mix (uColorStart, uColorEnd, strength * 0.75);

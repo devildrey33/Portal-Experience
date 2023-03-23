@@ -7,6 +7,7 @@ import portalFragmentShader from "../Shaders/portal/portalFragment.glsl"
 export default class Portal {
     constructor() {
         this.experience     = new Experience();
+        this.world          = this.experience.world;
         this.scene          = this.experience.scene;
         this.time           = this.experience.time;
         this.debug          = this.experience.debug;
@@ -40,9 +41,9 @@ export default class Portal {
             transparent     : true            
         })
 
-        this.portal2DMesh = this.experience.world.sceneMesh.portal2DMesh;
-        this.portal2DMesh.material = this.portalLightMaterial;
-
+        this.portal2DMesh           = this.experience.world.sceneMesh.portal2DMesh;
+        this.portal2DMesh.material  = this.portalLightMaterial;        
+        this.portal2DMesh.name      = "portal";
     }
 
     // update the time on each frame adding delta time to ensure same result with diferent framerates

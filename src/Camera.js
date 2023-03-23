@@ -18,7 +18,10 @@ export default class Camera {
 
     setInstance() {
         this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100);
-        this.instance.position.set(0,4,8);
+        const angle = 0.17 * Math.PI;
+        this.instance.position.set(Math.cos(angle) * 8, 4, Math.sin(angle) * 8);        
+        this.instance.lookAt(new THREE.Vector3(0, 0, 0));
+
         this.scene.add(this.instance);
     }
 
@@ -29,6 +32,7 @@ export default class Camera {
         // Limit the view angle to avoid position the camera under the ground
         this.controls.maxPolarAngle = Math.PI / 2 - 0.1;
 
+        
     }
 
     resize() {
