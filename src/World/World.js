@@ -62,9 +62,9 @@ export default class World {
     }
 
     eventClick(event) {
+        event.preventDefault();
         const time = this.getPortalTime();
         const delay = this.portal.portalLightMaterial.uniforms.uAnimationDelay.value;
-        console.log(delay)
         // if the mouse is hover the portal
         if (this.portalHover === true) {
             // if animations are runing, do nothing
@@ -96,8 +96,11 @@ export default class World {
             }
         }
 
-        // set the mouse cursor
-        this.canvas.style.cursor = (this.portalHover) ? "pointer" : "default";
+        // if the resolution doesnt seem a mobile
+        if (window.innerWidth > 767) {
+            // set the mouse cursor 
+            document.body.style.cursor = (this.portalHover) ? "pointer" : "default";
+        }
     }
 
     // Updates values for portal2D, portalKabush and fireFliers
