@@ -9,6 +9,9 @@ html, body {
     overflow: hidden;
     font-family:'Orbitron',sans-serif;
     font-size:max(1vw, 1vh); 
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none;
 }
 
 
@@ -27,6 +30,7 @@ html, body {
     outline: none;
     filter:grayscale(0%);
     transition:filter 1s;
+    user-select:none;
 }
 
 .Experience[loading = "true"] > .Experience_Canvas {
@@ -63,6 +67,7 @@ html, body {
     position:fixed;
     bottom :0;
     right:0;
+    user-select:none;
 }
 
 .Experience_Control {
