@@ -18,7 +18,10 @@ export default class Debug {
         animationDelay          : 0.6,
         animationSpeed          : (this.active === false) ? 0.8 : 0.2,
         colorWaveTime           : 1.2,
-        colorWaveAmplitude      : 0.5
+        colorWaveAmplitude      : 0.5,
+        bloomThreshold          : 0.0,
+        bloomStrength           : 0.2,
+        bloomRadius             : 0.0
     };
     
     constructor() {        
@@ -37,6 +40,7 @@ export default class Debug {
         this.portalLightMaterial = this.experience.world.portal.portalLightMaterial;
         this.kabushMaretial      = this.experience.world.portalKabush.kabushMaretial;
         this.firefliesMaretial   = this.experience.world.fireFliers.firefliesMaretial;
+        this.bloomPass           = this.experience.renderer.bloomPass;
 
         this.debugPortal = this.gui.addFolder("Portal")
 //        this.gui.open(true)
@@ -107,6 +111,18 @@ export default class Debug {
         
         this.debugPortalWaves.add(this.defaultOptions, 'colorWaveAmplitude').min(0.1).max(2).step(0.01).onChange(() => {
             this.portalLightMaterial.uniforms.uColorWaveAmplitude.value = this.defaultOptions.colorWaveAmplitude;
+        });
+
+        this.debugBloom = this.gui.addFolder("Bloom");
+        this.debugBloom.add(this.defaultOptions, "bloomThreshold").min(-2).max(2).step(0.01).onChange(() => {
+            this.bloomPass.threshold = this.defaultOptions.bloomThreshold;
+        });
+        this.debugBloom.add(this.defaultOptions, "bloomRadius").min(-2).max(2).step(0.01).onChange(() => {
+            this.bloomPass.radius = this.defaultOptions.bloomRadius;
+        });
+        this.debugBloom.add(this.defaultOptions, "bloomStrength").min(0).max(2).step(0.01).onChange(() => {
+            this.bloomPass.strength = this.defaultOptions.bloomStrength;
+            console.log(this.experience.renderer.bloomPass.strength);
         });
         
         // Firefliers size

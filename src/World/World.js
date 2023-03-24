@@ -13,7 +13,8 @@ export default class World {
         this.sizes       = this.experience.sizes;
         this.scene       = this.experience.scene;
         this.resources   = this.experience.resources;
-        this.debug       = this.experience.debug;        
+        this.debug       = this.experience.debug;      
+        this.renderer    = this.experience.renderer;  
         this.raycaster   = new THREE.Raycaster();
         this.mouse       = new THREE.Vector2(0, 0);
         this.portalHover = false;
@@ -103,6 +104,59 @@ export default class World {
         }
     }
 
+
+    // Clamp number between two values with the following line:
+    clamp(num, min, max) {
+        return Math.min(Math.max(num, min), max);
+    } 
+
+    mix(x, y, a) {
+        return x * (1 - a) + y * a;
+    }
+
+    /* Cubic bezier function from ChatGPT */
+    cubicBezier(A, B, C, D, t) {
+        const E = this.mix(A, B, t);
+        const F = this.mix(B, C, t);
+        const G = this.mix(C, D, t);
+
+        const H = this.mix(E, F, t);
+        const I = this.mix(F, G, t);
+
+        const P = this.mix(H, I, t);
+
+        return P;
+    }
+
+    updateBloom() {
+        const time = this.portal.portalLightMaterial.uniforms.uTime.value;
+        const delay = this.portal.portalLightMaterial.uniforms.uAnimationDelay.value;
+        const speed = this.portal.portalLightMaterial.uniforms.uAnimationSpeed.value;
+
+        if (time < 1.0 + delay ||  time < 61.0) {
+
+            const clampTime = this.clamp(((time - delay) * speed), 0.0, 1.0);
+            const bloomStart = this.cubicBezier(0.0, 0.0, 1.4, 1, clampTime);
+
+            if (time < 60.0) {
+                // apply strength
+                this.renderer.bloomPass.strength = Math.abs(bloomStart * 0.15);
+                // add a wave effect to strength
+                this.renderer.bloomPass.strength += (Math.sin(time * 1.2) * 0.10);
+                this.lastStrength = this.renderer.bloomPass.strength;
+            }
+            else {
+                // need to decrease the last wave to 0 smoothly
+                this.renderer.bloomPass.strength -= this.lastStrength / 30;
+                //console.log(bloomStart, bloomEnd, this.renderer.bloomPass.strength);
+            }
+        }
+        else {
+            this.renderer.bloomPass.strength = 0;
+        }
+//        console.log(this.renderer.bloomPass.strength);
+    }
+
     // Updates values for portal2D, portalKabush and fireFliers
     update() {
         if (this.resources.finished) {
@@ -111,6 +165,8 @@ export default class World {
             this.fireFliers.update();
 
             this.updateRaycaster();
+            this.updateBloom();
         }
     }
 }
+

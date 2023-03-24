@@ -1,5 +1,9 @@
 import * as THREE from 'three'
-import Experience from "./Experience";
+import Experience from "./Experience"
+
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 export default class Renderer {
     // Costructor
@@ -10,6 +14,7 @@ export default class Renderer {
         this.sizes      = this.experience.sizes;
         this.scene      = this.experience.scene;
         this.camera     = this.experience.camera;
+        this.time       = this.experience.time;
 
         this.setInstance();
     }
@@ -32,11 +37,29 @@ export default class Renderer {
         this.instance.setClearColor('#211d20');
         this.instance.setSize(this.sizes.width, this.sizes.height);
         this.instance.setPixelRatio(this.sizes.pixelRatio);
+
+        /**
+         * Post processing
+         */
+        this.effectComposer = new EffectComposer(this.instance);
+        this.effectComposer.setSize(this.sizes.width, this.sizes.height);
+        this.effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        // first pass 
+        this.renderPass = new RenderPass(this.scene, this.camera.instance);
+        this.effectComposer.addPass(this.renderPass);
+
+        this.bloomPass = new UnrealBloomPass( new THREE.Vector2( this.sizes.width, this.sizes.height ), 1.5, 0.4, 0.85 );
+        this.bloomPass.threshold = 0.5;
+        this.bloomPass.strength  = 0.0;
+        this.bloomPass.radius    = 0.0;        
+
+        this.effectComposer.addPass(this.bloomPass);
     }
 
     /**
      * Function called on resize
-    */
+     */
     resize() {
         this.instance.setSize(this.sizes.width, this.sizes.height);
         this.instance.setPixelRatio(this.sizes.pixelRatio);
@@ -44,8 +67,10 @@ export default class Renderer {
 
     /**
      * Function called on update
-    */
+     */
     update() {
-        this.instance.render(this.scene, this.camera.instance)
+//        this.bloomPass.strength = Math.sin(this.time.current * 2);
+//        this.instance.render(this.scene, this.camera.instance);
+        this.effectComposer.render();
     }
 }
