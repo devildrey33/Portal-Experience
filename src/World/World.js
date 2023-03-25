@@ -4,6 +4,7 @@ import Portal from './Portal.js'
 import FireFliers from './FireFliers.js';
 import PortalKabush from './PortalKabush.js';
 import * as THREE from 'three';
+import "../Utils/MathUtils.js";
 
 
 export default class World {
@@ -44,7 +45,7 @@ export default class World {
         });        
     }
 
-    /* Function to set the portal current time. 
+    /* Function to set the current portal time. 
        at 0 starts the open animation
        at 60 starts the end animation
      */
@@ -53,15 +54,18 @@ export default class World {
         this.portalKabush.kabushMaretial.uniforms.uTime.value = time;
     }
 
+    // Gets the current portal time
     getPortalTime() {
         return this.portal.portalLightMaterial.uniforms.uTime.value;
     }
 
+    // Mouse move event
     eventMouseMouve(event) {
         this.mouse.x = event.clientX / this.sizes.width    * 2 - 1;
         this.mouse.y = - (event.clientY / this.sizes.height) * 2 + 1;
     }
 
+    // Click event
     eventClick(event) {
         event.preventDefault();
         const time = this.getPortalTime();
@@ -83,61 +87,44 @@ export default class World {
         }
     }
 
+    // RayCaster for mouse detection, it only apply to the 2d portal
     updateRaycaster() {
         this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
-
+        
+        // Set portal hover to false by default
         this.portalHover = false;
 
         // Search the portal
         for (var i = 0; i < intersects.length; i++) {
             if (intersects[i].object === this.portal.portal2DMesh) {
+                // Portal hover to true, because whe found it
                 this.portalHover = true;
                 break;
             }
         }
 
-        // if the resolution doesnt seem a mobile
-        if (window.innerWidth > 767) {
+        // if the resolution doesn't seem a mobile
+        if (this.sizes.width > 767) {
             // set the mouse cursor 
+            // I DONT KNOW WHY, BUT WHEN I CHANGE THE CURSOR IN MOBILE, IT DOES A 
+            // FULL SCREEN SELECTION, so this code only works if the width of the viewport its geater than 767
             document.body.style.cursor = (this.portalHover) ? "pointer" : "default";
         }
     }
 
-
-    // Clamp number between two values with the following line:
-    clamp(num, min, max) {
-        return Math.min(Math.max(num, min), max);
-    } 
-
-    mix(x, y, a) {
-        return x * (1 - a) + y * a;
-    }
-
-    /* Cubic bezier function from ChatGPT */
-    cubicBezier(A, B, C, D, t) {
-        const E = this.mix(A, B, t);
-        const F = this.mix(B, C, t);
-        const G = this.mix(C, D, t);
-
-        const H = this.mix(E, F, t);
-        const I = this.mix(F, G, t);
-
-        const P = this.mix(H, I, t);
-
-        return P;
-    }
-
+    // updates bloom on each frame
     updateBloom() {
-        const time = this.portal.portalLightMaterial.uniforms.uTime.value;
+        const time  = this.getPortalTime();
         const delay = this.portal.portalLightMaterial.uniforms.uAnimationDelay.value;
         const speed = this.portal.portalLightMaterial.uniforms.uAnimationSpeed.value;
 
         if (time < 1.0 + delay ||  time < 61.0) {
-
-            const clampTime = this.clamp(((time - delay) * speed), 0.0, 1.0);
-            const bloomStart = this.cubicBezier(0.0, 0.0, 1.4, 1, clampTime);
-
+            // clampTime after delay its 0 and then comes to one with the time
+            const clampTime  = Math.clamp(((time - delay) * speed), 0.0, 1.0);
+            // use the same cubic-bezier values of the kabush to start
+            const bloomStart = Math.cubicBezier(0.0, 0.0, 1.4, 1, clampTime);
+            // if time its below 60 its because portal its open
             if (time < 60.0) {
                 // apply strength
                 this.renderer.bloomPass.strength = Math.abs(bloomStart * 0.15);
@@ -145,19 +132,20 @@ export default class World {
                 this.renderer.bloomPass.strength += (Math.sin(time * 1.2) * 0.10);
                 this.lastStrength = this.renderer.bloomPass.strength;
             }
+            // Portal is closing
             else {
                 // need to decrease the last wave to 0 smoothly
                 this.renderer.bloomPass.strength -= this.lastStrength / 30;
                 //console.log(bloomStart, bloomEnd, this.renderer.bloomPass.strength);
             }
         }
+        // Portal is closed
         else {
             this.renderer.bloomPass.strength = 0;
         }
-//        console.log(this.renderer.bloomPass.strength);
     }
 
-    // Updates values for portal2D, portalKabush and fireFliers
+    // Updates values for the world
     update() {
         if (this.resources.finished) {
             this.portal.update();

@@ -31,7 +31,7 @@ void main() {
     vec4 modelPosition      = modelMatrix       * vec4(position , 1.0);
     
     // clampTime its 0 until uAnimationDelay its consumed, then goes from 0 to 1
-    float clampTime = clamp((uTime - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0);
+    float clampTime = clamp((abs(uTime) - uAnimationDelay) * uAnimationSpeed, 0.0, 1.0);
     // current time for cubic-bezier timeline, can go from 0.01 to 1.9 to -0.01
     float curTime =  cubic_bezier(0.0, 0.7, 1.4, -0.4, clampTime);
     
