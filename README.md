@@ -5,7 +5,7 @@ This experience its based on https://threejs-journey.com/ chapter 6 Portal Scene
 - Has an extra particles with vertex and fragment shader to simulate a very basic kabush effect on the initial portal animation.
 - You can tweak those shader values and have some fun, and even try to get a better result qhit this sand box. (but you need to be in debug mode, use #debug after the url and refresh)
 - You can open / close the portal by clicking them
-- Added a consistent bloow effect to all animations (open / wave / close)
+- Added a consistent bloom effect to all animations (open / wave / close)
 
 Pourpose of this? have fun and learn a bit more.
 
@@ -18,4 +18,4 @@ You need run <code>npm install</code> once to get all dependencies.
 
 And then you can use <code>npm run dev</code> to start the local test server.
 
-Live example : https://devildrey33.es/Ejemplos/Three.js-Journey/39-Adding-details-to-the-scene/
+Live example : https://devildrey33.es/Ejemplos/Three.js-Journey/Portal-Experience/
