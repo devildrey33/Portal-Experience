@@ -117,10 +117,10 @@ export default class Debug {
         this.debugPortalShow.add(this.animateButton2, 'animate2').name("Close StarGate");
 
         /*
-         * Wave animation
+         * Light Wave animation
          */
 
-        this.debugPortalWaves = this.debugPortal.addFolder("Wave animation").open(false);
+        this.debugPortalWaves = this.debugPortal.addFolder("Light Wave animation").open(false);
         this.debugPortalWaves.add(this.defaultOptions, 'colorWaveTime').min(0.1).max(10).step(0.01).onChange(() => {
             this.portalLightMaterial.uniforms.uColorWaveTime.value = this.defaultOptions.colorWaveTime;
         });
