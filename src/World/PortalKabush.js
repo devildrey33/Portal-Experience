@@ -27,16 +27,17 @@ export default class PortalKabush {
                 uColorStart             : { value : new THREE.Color(this.defaultOptions.portalColorStart) },
                 uColorEnd               : { value : new THREE.Color(this.defaultOptions.portalColorEnd) },
                 uPixelRatio             : { value : Math.min(window.devicePixelRatio, 2) },
-                uSize                   : { value : 50 },
+                uSize                   : { value : 100 },
                 uAnimationDelay         : { value : this.defaultOptions.animationDelay },
-                uAnimationSpeed         : { value : this.defaultOptions.animationSpeed },        
+                uAnimationSpeed         : { value : this.defaultOptions.animationSpeed },
+                uKabushHeight           : { value : this.defaultOptions.kabushHeight }
             },
             vertexShader    : kabushVertexShader,
             fragmentShader  : kabushFragmentShader
         });
 
         this.kabushGeometry      = new THREE.BufferGeometry();
-        this.kabushCount         = 2000;
+        this.kabushCount         = 1000;
         this.kabushPositionArray = new Float32Array(this.kabushCount * 3);
         this.kabushScaleArray    = new Float32Array(this.kabushCount);
         this.kabushAngleArray    = new Float32Array(this.kabushCount);

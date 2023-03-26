@@ -15,6 +15,7 @@ export default class Renderer {
         this.scene      = this.experience.scene;
         this.camera     = this.experience.camera;
         this.time       = this.experience.time;
+        this.debug      = this.experience.debug;
 
         this.setInstance();
     }
@@ -50,9 +51,9 @@ export default class Renderer {
         this.effectComposer.addPass(this.renderPass);
 
         this.bloomPass = new UnrealBloomPass( new THREE.Vector2( this.sizes.width, this.sizes.height ), 1.5, 0.4, 0.85 );
-        this.bloomPass.threshold = 0.5;
+        this.bloomPass.threshold = this.debug.defaultOptions.bloomThreshold;
         this.bloomPass.strength  = 0.0;
-        this.bloomPass.radius    = 0.0;        
+        this.bloomPass.radius    = this.debug.defaultOptions.bloomRadius;        
 
         this.effectComposer.addPass(this.bloomPass);
     }

@@ -3,6 +3,7 @@ uniform float uSize;
 uniform float uTime;
 uniform float uAnimationDelay;
 uniform float uAnimationSpeed;
+uniform float uKabushHeight;
 
 attribute float aScale;
 attribute float aRand;
@@ -45,7 +46,7 @@ void main() {
     modelPosition.y = modelPosition.y + (sin(mod(360.0, aAngle + clampTime)) * rad * (curTime * .95));
 
     // aRand ads a bit of random velocity for the particles
-    modelPosition.z += 4.0 * ((curTime * aScale * (aRand)) - (aRand * 0.1));
+    modelPosition.z += uKabushHeight * ((curTime * aScale * (aRand)) - (aRand * 0.1));
 
     vec4 viewPosition       = viewMatrix        * modelPosition;
     vec4 projectionPosition = projectionMatrix  * viewPosition;
@@ -57,11 +58,12 @@ void main() {
     float scale = ((aScale * clampTime) * 15.0);
 
     // Adapt point size to pixel ratio and random scale
-    gl_PointSize = uSize * scale * uPixelRatio;
+    gl_PointSize = uSize * scale * uPixelRatio * 1.5;
 
     // Size attenuation
     gl_PointSize *= (1.0 / - viewPosition.z);
 
     vVisible = 0.0;
+    // if the particle its not behind the 2d plane portal, make it visible in the fragment
     if (modelZ < modelPosition.z) vVisible = 1.0;
 }

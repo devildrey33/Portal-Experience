@@ -9,16 +9,17 @@ import "../Utils/MathUtils.js";
 
 export default class World {
     constructor() {
-        this.experience  = new Experience();
-        this.canvas      = this.experience.canvas;
-        this.sizes       = this.experience.sizes;
-        this.scene       = this.experience.scene;
-        this.resources   = this.experience.resources;
-        this.debug       = this.experience.debug;      
-        this.renderer    = this.experience.renderer;  
-        this.raycaster   = new THREE.Raycaster();
-        this.mouse       = new THREE.Vector2(0, 0);
-        this.portalHover = false;
+        this.experience      = new Experience();
+        this.canvas          = this.experience.canvas;
+        this.sizes           = this.experience.sizes;
+        this.scene           = this.experience.scene;
+        this.resources       = this.experience.resources;
+        this.debug           = this.experience.debug;      
+        this.renderer        = this.experience.renderer;  
+        this.raycaster       = new THREE.Raycaster();
+        this.mouse           = new THREE.Vector2(0, 0);
+        this.portalHover     = false;
+        this.bloomMultiplyer = this.debug.defaultOptions.bloomStrength;
 
         // Click event
         this.hEventClick = this.eventClick.bind(this);
@@ -56,7 +57,9 @@ export default class World {
 
     // Gets the current portal time
     getPortalTime() {
-        return this.portal.portalLightMaterial.uniforms.uTime.value;
+        let time = this.portal.portalLightMaterial.uniforms.uTime.value;
+        if (time < 0) time = 61;
+        return time;
     }
 
     // Mouse move event
@@ -127,7 +130,7 @@ export default class World {
             // if time its below 60 its because portal its open
             if (time < 60.0) {
                 // apply strength
-                this.renderer.bloomPass.strength = Math.abs(bloomStart * 0.15);
+                this.renderer.bloomPass.strength = Math.abs(bloomStart * this.bloomMultiplyer);
                 // add a wave effect to strength
                 this.renderer.bloomPass.strength += (Math.sin(time * 1.2) * 0.10);
                 this.lastStrength = this.renderer.bloomPass.strength;
