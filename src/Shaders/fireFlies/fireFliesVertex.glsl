@@ -48,10 +48,12 @@ float cnoise(vec2 P){
 
 void main() {
     vec4 modelPosition      = modelMatrix       * vec4(position , 1.0);
+    // Add a sin wave animation to the y axis
     modelPosition.y += sin(abs(uTime) + modelPosition.x * 100.0) * aScale * 0.2;
 
-    modelPosition.x = modelPosition.x + cnoise(vec2(modelPosition.x, uTime * 0.02)) * uNoiseStrength;
-    modelPosition.z = modelPosition.z + cnoise(vec2(modelPosition.z, uTime * 0.02)) * uNoiseStrength;
+    // Add some noise to x and z to make random paths
+    modelPosition.x = modelPosition.x + cnoise(vec2(modelPosition.x, aScale * uTime * 0.02)) * uNoiseStrength;
+    modelPosition.z = modelPosition.z + cnoise(vec2(modelPosition.z, aScale * uTime * 0.02)) * uNoiseStrength;
 
     vec4 viewPosition       = viewMatrix        * modelPosition;
     vec4 projectionPosition = projectionMatrix  * viewPosition;
