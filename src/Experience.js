@@ -23,7 +23,7 @@ export default class Experience {
         // Height in pixels. Use 'auto' to fit all viewport height
         height                  : "auto",           
         // Show framerate inside the butons frame
-        showFPS                 : true,            
+        showFPS                 : false,            
         // Show full screen buton in the buttons frame
         buttonFullScreen        : false,            
         // Show my logo buton in the buttons frame (that redirects to devildrey33.es)

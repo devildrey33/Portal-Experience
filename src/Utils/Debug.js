@@ -57,111 +57,14 @@ export default class Debug {
         this.bloomPass           = this.experience.renderer.bloomPass;
         this.world               = this.experience.world;
 
-        this.debugPortal = this.gui.addFolder("Portal").open(false);
-//        this.gui.open(true)
-        
-        this.debugPortal.addColor(this.defaultOptions, 'portalColorStart').onChange(() => {
-            this.portalLightMaterial.uniforms.uColorStart.value.set(this.defaultOptions.portalColorStart);
-        })
-        this.debugPortal.addColor(this.defaultOptions, 'portalColorEnd').onChange(() => {
-            this.portalLightMaterial.uniforms.uColorEnd.value.set(this.defaultOptions.portalColorEnd);
-        })
-        
-        /* 
-         * 2D Perlin noise animation
-         */
-        this.debug2dPerlinNoise = this.debugPortal.addFolder("2D Perlin noise animation").open(false);
-
-        this.debug2dPerlinNoise.add(this.defaultOptions, 'perlinNoiseStrength1').min(0.1).max(30).step(0.01).onChange(() => {
-            this.portalLightMaterial.uniforms.uPerlinNoiseStrength1.value = this.defaultOptions.perlinNoiseStrength1;
-        });
-        
-        this.debug2dPerlinNoise.add(this.defaultOptions, 'perlinNoiseStrength2').min(0.1).max(10).step(0.01).onChange(() => {
-            this.portalLightMaterial.uniforms.uPerlinNoiseStrength2.value = this.defaultOptions.perlinNoiseStrength2;
-        });
-        
-        this.debug2dPerlinNoise.add(this.defaultOptions, 'perlinNoiseTime1').min(0.01).max(3).step(0.001).onChange(() => {
-            this.portalLightMaterial.uniforms.uPerlinNoiseTime1.value = this.defaultOptions.perlinNoiseTime1;
-        });
-        
-        this.debug2dPerlinNoise.add(this.defaultOptions, 'perlinNoiseTime2').min(0.01).max(4).step(0.001).onChange(() => {
-            this.portalLightMaterial.uniforms.uPerlinNoiseTime2.value = this.defaultOptions.perlinNoiseTime2;
-        });
-        
-        this.debug2dPerlinNoise.add(this.defaultOptions, 'outherGlowStrength').min(0.1).max(300).step(0.01).onChange(() => {
-            this.portalLightMaterial.uniforms.uOutherGlowStrength.value = this.defaultOptions.outherGlowStrength;
-        });
-        
-        this.debug2dPerlinNoise.add(this.defaultOptions, 'outherGlowLimit').min(0.1).max(20).step(0.01).onChange(() => {
-            this.portalLightMaterial.uniforms.uOutherGlowLimit.value = this.defaultOptions.outherGlowLimit;
-        });
-
         /*
-         *  Porttal open / close animation
+         * Firefliers folder
          */
-        
-        this.debugPortalShow = this.debugPortal.addFolder("Portal open / close animation").open(false);
-        this.debugPortalShow.add(this.defaultOptions, 'animationDelay').min(0).max(3).step(0.01).onChange(() => {
-            this.portalLightMaterial.uniforms.uAnimationDelay.value = this.defaultOptions.animationDelay;
-            this.kabushMaretial.uniforms.uAnimationDelay.value = this.defaultOptions.animationDelay;
-        });
-        
-        this.debugPortalShow.add(this.defaultOptions, 'animationSpeed').min(0.1).max(3).step(0.01).onChange(() => {
-            this.portalLightMaterial.uniforms.uAnimationSpeed.value = this.defaultOptions.animationSpeed;
-            this.kabushMaretial.uniforms.uAnimationSpeed.value = this.defaultOptions.animationSpeed;
-        });
-        
-        /*
-         * Light Wave animation
-         */
-
-        this.debugPortalWaves = this.debugPortal.addFolder("Light Wave animation").open(false);
-        this.debugPortalWaves.add(this.defaultOptions, 'colorWaveTime').min(0.1).max(10).step(0.01).onChange(() => {
-            this.portalLightMaterial.uniforms.uColorWaveTime.value = this.defaultOptions.colorWaveTime;
-        });
-        
-        this.debugPortalWaves.add(this.defaultOptions, 'colorWaveAmplitude').min(0.1).max(2).step(0.01).onChange(() => {
-            this.portalLightMaterial.uniforms.uColorWaveAmplitude.value = this.defaultOptions.colorWaveAmplitude;
-        });
-
-        /*
-         * Portal kabush
-         */
-
-        this.debugPortalKabush = this.debugPortal.addFolder("Kabush animation").open(false);
-        this.debugPortalKabush.add(this.defaultOptions, "kabushParticleSize").min(0.1).max(500).step(0.01).onChange(() => {
-            this.world.portalKabush.kabushMaretial.uniforms.uSize.value = this.defaultOptions.kabushParticleSize;
-        });
-        this.debugPortalKabush.add(this.defaultOptions, "kabushHeight").min(0.2).max(10).step(0.01).onChange(() => {
-            this.world.portalKabush.kabushMaretial.uniforms.uKabushHeight.value = this.defaultOptions.kabushHeight;
-        });
-
-        /*
-         * Bloom
-         */
-        this.debugBloom = this.gui.addFolder("Bloom (postprocessing)").open(false);
-
-        this.debugBloom.add(this.defaultOptions, "bloomEnabled").onChange(() => {
-            this.bloomPass.enabled = this.defaultOptions.bloomEnabled;
-        });
-        this.debugBloom.add(this.defaultOptions, "bloomThreshold").min(-2).max(2).step(0.01).onChange(() => {
-            this.bloomPass.threshold = this.defaultOptions.bloomThreshold;
-        });
-        this.debugBloom.add(this.defaultOptions, "bloomRadius").min(-2).max(2).step(0.01).onChange(() => {
-            this.bloomPass.radius = this.defaultOptions.bloomRadius;
-        });
-        this.debugBloom.add(this.defaultOptions, "bloomStrength").min(0).max(1).step(0.01).name("bloomMultiplyer").onChange(() => {
-            this.world.bloomMultiplyer = this.defaultOptions.bloomStrength;
-            console.log(this.experience.renderer.bloomPass.strength);
-        });
-        
-        // Firefliers folder
         this.debugFirefliers = this.gui.addFolder("Firefliers").open(false);
         // Firefliers size
         this.debugFirefliers.add(this.defaultOptions, 'firefliesSize').min(0.0).max(500).step(1).onChange(() => {
             this.firefliesMaretial.uniforms.uSize.value = this.defaultOptions.firefliesSize;
         });
-        
         // Firefliers count
         this.debugFirefliers.add(this.defaultOptions, "firefliesCount").min(5).max(1000).step(1).onChange(() => {
             this.experience.world.fireFliers.setup(this.defaultOptions.firefliesCount);
@@ -173,30 +76,140 @@ export default class Debug {
         // Firefliers noise strength
         this.debugFirefliers.add(this.defaultOptions, "firefliesNoiseStrength").min(0.01).max(10).step(0.01).onChange(() => {
             this.firefliesMaretial.uniforms.uNoiseStrength.value = this.defaultOptions.firefliesNoiseStrength;
+        });     
+        
+        /*
+         * Portal
+         */
+        this.debugPortal = this.gui.addFolder("Portal").open(false);
+        // Color start
+        this.debugPortal.addColor(this.defaultOptions, 'portalColorStart').onChange(() => {
+            this.portalLightMaterial.uniforms.uColorStart.value.set(this.defaultOptions.portalColorStart);
+        })
+        // Color end
+        this.debugPortal.addColor(this.defaultOptions, 'portalColorEnd').onChange(() => {
+            this.portalLightMaterial.uniforms.uColorEnd.value.set(this.defaultOptions.portalColorEnd);
+        })
+        
+        /* 
+         * 2D Perlin noise animation
+         */
+        this.debug2dPerlinNoise = this.debugPortal.addFolder("2D Perlin noise animation").open(false);
+        // Perlin noise Strength 1
+        this.debug2dPerlinNoise.add(this.defaultOptions, 'perlinNoiseStrength1').min(0.1).max(30).step(0.01).onChange(() => {
+            this.portalLightMaterial.uniforms.uPerlinNoiseStrength1.value = this.defaultOptions.perlinNoiseStrength1;
+        });
+        // Perlin noise Strength 2
+        this.debug2dPerlinNoise.add(this.defaultOptions, 'perlinNoiseStrength2').min(0.1).max(10).step(0.01).onChange(() => {
+            this.portalLightMaterial.uniforms.uPerlinNoiseStrength2.value = this.defaultOptions.perlinNoiseStrength2;
+        });
+        // Perlin noise Time 1        
+        this.debug2dPerlinNoise.add(this.defaultOptions, 'perlinNoiseTime1').min(0.01).max(3).step(0.001).onChange(() => {
+            this.portalLightMaterial.uniforms.uPerlinNoiseTime1.value = this.defaultOptions.perlinNoiseTime1;
+        });
+        // Perlin noise Time 2        
+        this.debug2dPerlinNoise.add(this.defaultOptions, 'perlinNoiseTime2').min(0.01).max(4).step(0.001).onChange(() => {
+            this.portalLightMaterial.uniforms.uPerlinNoiseTime2.value = this.defaultOptions.perlinNoiseTime2;
+        });
+        // Outher Glow Strength            
+        this.debug2dPerlinNoise.add(this.defaultOptions, 'outherGlowStrength').min(0.1).max(300).step(0.01).onChange(() => {
+            this.portalLightMaterial.uniforms.uOutherGlowStrength.value = this.defaultOptions.outherGlowStrength;
+        });
+        // Outher Glow Limit 
+        this.debug2dPerlinNoise.add(this.defaultOptions, 'outherGlowLimit').min(0.1).max(20).step(0.01).onChange(() => {
+            this.portalLightMaterial.uniforms.uOutherGlowLimit.value = this.defaultOptions.outherGlowLimit;
+        });
+
+        /*
+         *  Porttal open / close animation
+         */        
+        this.debugPortalShow = this.debugPortal.addFolder("Portal open / close animation").open(false);
+        // Animation delay for the portal open / close
+        this.debugPortalShow.add(this.defaultOptions, 'animationDelay').min(0).max(3).step(0.01).onChange(() => {
+            this.portalLightMaterial.uniforms.uAnimationDelay.value = this.defaultOptions.animationDelay;
+            this.kabushMaretial.uniforms.uAnimationDelay.value = this.defaultOptions.animationDelay;
+        });
+        // Animation speed for the portal open / close (speed is 1 second * animationSpeed)
+        this.debugPortalShow.add(this.defaultOptions, 'animationSpeed').min(0.1).max(3).step(0.01).onChange(() => {
+            this.portalLightMaterial.uniforms.uAnimationSpeed.value = this.defaultOptions.animationSpeed;
+            this.kabushMaretial.uniforms.uAnimationSpeed.value = this.defaultOptions.animationSpeed;
         });
         
+        /*
+         * Light Wave animation
+         */
+        this.debugPortalWaves = this.debugPortal.addFolder("Light Wave animation").open(false);
+        // Time for sin animation of the waves (OutherGlow & Bloom)
+        this.debugPortalWaves.add(this.defaultOptions, 'colorWaveTime').min(0.1).max(10).step(0.01).onChange(() => {
+            this.portalLightMaterial.uniforms.uColorWaveTime.value = this.defaultOptions.colorWaveTime;
+        });
+        // Amplitude of the sin animation for the waves (OutherGlow & Bloom)        
+        this.debugPortalWaves.add(this.defaultOptions, 'colorWaveAmplitude').min(0.1).max(2).step(0.01).onChange(() => {
+            this.portalLightMaterial.uniforms.uColorWaveAmplitude.value = this.defaultOptions.colorWaveAmplitude;
+        });
 
+        /*
+         * Portal kabush
+         */
+        this.debugPortalKabush = this.debugPortal.addFolder("Kabush animation").open(false);
+        // Size for portal kabush particles
+        this.debugPortalKabush.add(this.defaultOptions, "kabushParticleSize").min(0.1).max(500).step(0.01).onChange(() => {
+            this.world.portalKabush.kabushMaretial.uniforms.uSize.value = this.defaultOptions.kabushParticleSize;
+        });
+        // Distance to travel for the z-axis of portal kabush particles
+        this.debugPortalKabush.add(this.defaultOptions, "kabushHeight").min(0.2).max(10).step(0.01).onChange(() => {
+            this.world.portalKabush.kabushMaretial.uniforms.uKabushHeight.value = this.defaultOptions.kabushHeight;
+        });
 
-        /////////////
-        // GENERAL
+        /*
+         * Bloom
+         */
+        this.debugBloom = this.gui.addFolder("Bloom (postprocessing)").open(false);
+        // Enable / disable bloom
+        this.debugBloom.add(this.defaultOptions, "bloomEnabled").onChange(() => {
+            this.bloomPass.enabled = this.defaultOptions.bloomEnabled;
+        });
+        // Bloom Threshold
+        this.debugBloom.add(this.defaultOptions, "bloomThreshold").min(-2).max(2).step(0.01).onChange(() => {
+            this.bloomPass.threshold = this.defaultOptions.bloomThreshold;
+        });
+        // Bloom Radius
+        this.debugBloom.add(this.defaultOptions, "bloomRadius").min(-2).max(2).step(0.01).onChange(() => {
+            this.bloomPass.radius = this.defaultOptions.bloomRadius;
+        });
+        // Bloom Strength
+        this.debugBloom.add(this.defaultOptions, "bloomStrength").min(0).max(1).step(0.01).name("bloomMultiplyer").onChange(() => {
+            this.world.bloomMultiplyer = this.defaultOptions.bloomStrength;
+            console.log(this.experience.renderer.bloomPass.strength);
+        });
+        
+        
+        
+
+        /*
+         * GENERAL
+         */
+        // Scene background color 
         this.gui.addColor(this.defaultOptions, 'clearColor').onChange(() => { 
             this.experience.renderer.instance.setClearColor(this.defaultOptions.clearColor); 
         })
 
-        
+        // Animation values for portal opening
         this.animateButton = { animate : () => { 
             // Reset shader time
             this.portalLightMaterial.uniforms.uTime.value = 0; 
             this.kabushMaretial.uniforms.uTime.value      = 0; 
         }}        
+        // Open portal animation button
         this.gui.add(this.animateButton, 'animate').name("Open Portal");
 
+        // Animation values for portal closing
         this.animateButton2 = { animate2 : () => { 
             // Set shader time to 1 minute, so the close animation starts
             this.portalLightMaterial.uniforms.uTime.value = 60; 
             this.kabushMaretial.uniforms.uTime.value      = 60; 
         }}
-        
+        // Close portal animation button        
         this.gui.add(this.animateButton2, 'animate2').name("Close Portal");
 
 
