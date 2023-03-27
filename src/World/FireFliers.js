@@ -8,20 +8,29 @@ export default class FireFliers {
         this.experience = new Experience();
         this.scene      = this.experience.scene;
         this.time       = this.experience.time;
+        this.debug      = this.experience.debug
 
-        this.setup();
+
+        this.setup(this.debug.defaultOptions.firefliesCount);
     }
 
-    setup() {
+    setup(count) {
+        // dispose old particles
+        if (typeof this.fireFliesGeometry !== "undefined") {
+            // remove firefliers from scene
+            this.scene.remove(this.fireFlies);  
+            // Dispose the firefliers Points
+            this.firefliesMaretial.dispose();
+            this.fireFliesGeometry.dispose();
+        }
         this.fireFliesGeometry      = new THREE.BufferGeometry();
-        this.fireFlyesCount         = 30;
-        this.fireFlyesPositionArray = new Float32Array(this.fireFlyesCount * 3);
-        this.fireFlyesScaleArray    = new Float32Array(this.fireFlyesCount);
+        this.fireFlyesPositionArray = new Float32Array(count * 3);
+        this.fireFlyesScaleArray    = new Float32Array(count);
         
-        for (let i = 0; i < this.fireFlyesCount; i++) {
-            this.fireFlyesPositionArray[i * 3 + 0] = (Math.random() - 0.5) * 4;   // from -2 to 2
-            this.fireFlyesPositionArray[i * 3 + 1] = (Math.random() * 1.5);       // from 0 to 1.5
-            this.fireFlyesPositionArray[i * 3 + 2] = (Math.random() - 0.5) * 3.5;   // from -1.75 to 1.75
+        for (let i = 0; i < count; i++) {
+            this.fireFlyesPositionArray[i * 3 + 0] = (Math.random() - 0.5) * 3;    // from -1.5 to 1.5
+            this.fireFlyesPositionArray[i * 3 + 1] = (Math.random() * 1.5) + 0.35; // from 0.35 to 1.85
+            this.fireFlyesPositionArray[i * 3 + 2] = (Math.random() - 0.5) * 3;    // from -1.5 to 1.5
         
             this.fireFlyesScaleArray[i] = Math.random();
         }
@@ -33,9 +42,11 @@ export default class FireFliers {
             blending        : THREE.AdditiveBlending,   // Fusionate colors with the scene
             depthWrite      : false,                    // deactivate depthWrite to show objects behind
             uniforms        : {
-                uTime       : { value : 0 },
-                uPixelRatio : { value : Math.min(window.devicePixelRatio, 2) },
-                uSize       : { value : 100 }
+                uTime           : { value : 0 },
+                uPixelRatio     : { value : Math.min(window.devicePixelRatio, 2) },
+                uSize           : { value : 100 },
+                uColor          : { value : new THREE.Color("#ffffff") },
+                uNoiseStrength  : { value : this.debug.defaultOptions.firefliesNoiseStrength }
             },
             vertexShader    : fireFliersVertexShader,
             fragmentShader  : fireFliersFragmentShader
@@ -44,6 +55,10 @@ export default class FireFliers {
         // Points
         this.fireFlies = new THREE.Points(this.fireFliesGeometry, this.firefliesMaretial);
         this.scene.add(this.fireFlies);        
+    }
+
+    createParticles(count) {
+
     }
 
     // update the time on each frame adding delta time to ensure same result with diferent framerates

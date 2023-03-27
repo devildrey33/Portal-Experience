@@ -21,6 +21,9 @@ export default class World {
         this.portalHover     = false;
         this.bloomMultiplyer = this.debug.defaultOptions.bloomStrength;
 
+        // a counter to do only one time each 60 frames a debug comprobation
+        this.debugCounter = 0;
+
         // Click event
         this.hEventClick = this.eventClick.bind(this);
         this.canvas.addEventListener("click", this.hEventClick);
@@ -58,7 +61,6 @@ export default class World {
     // Gets the current portal time
     getPortalTime() {
         let time = this.portal.portalLightMaterial.uniforms.uTime.value;
-        if (time < 0) time = 61;
         return time;
     }
 
@@ -148,6 +150,8 @@ export default class World {
         }
     }
 
+
+
     // Updates values for the world
     update() {
         if (this.resources.finished) {
@@ -157,6 +161,21 @@ export default class World {
 
             this.updateRaycaster();
             this.updateBloom();
+
+            if (++this.debugCounter >= 60 * 5 || this.debugCounter < 0) {
+                const time = this.getPortalTime();
+                // if time its less than 0 time uniforms are corrupted, so they need to be set to 0 again
+                // happens some times when i have two more portal tabs form diferent sources (codepen , devildrey33.es, localhost)
+                if (time < 0) {
+                    time = 0;
+                    this.portalKabush.kabushMaretial.uniforms.uTime.value = time;
+                    this.portalKabush.kabushMaretial.uniforms.uTime.value = time;
+                    this.fireFliers.firefliesMaretial.uniforms.uTime.value = time;
+                }
+                // restart debugCounter to trigger this corruption comprobation every 5 secconds (AND ITS TOO MUCH)
+                this.debugCounter = 0;
+            }
+
         }
     }
 }

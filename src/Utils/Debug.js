@@ -1,5 +1,6 @@
 import Experience from '../Experience.js'
 import * as dat from 'lil-gui'
+import * as THREE from 'three'
 
 export default class Debug {
     // State of the debug class, if the url ends with "#debug" is true, else is false
@@ -7,6 +8,7 @@ export default class Debug {
 
     defaultOptions = {
         clearColor              : "#201919",
+        // Portal
         portalColorStart        : "#7a7ae6",
         portalColorEnd          : "#444497",
         perlinNoiseStrength1    : 11.75,
@@ -15,16 +17,25 @@ export default class Debug {
         perlinNoiseTime2        : 0.60,
         outherGlowStrength      : 12.5,
         outherGlowLimit         : 3.77,
+        // Open close animation
         animationDelay          : 0.6,
         animationSpeed          : (this.active === false) ? 0.8 : 0.2,
+        // Wave animation
         colorWaveTime           : 1.2,
         colorWaveAmplitude      : 0.5,
+        // bloom
         bloomEnabled            : true,
         bloomThreshold          : -0.92,
         bloomStrength           : 0.11,
         bloomRadius             : -0.85,
+        // Kabush
         kabushParticleSize      : 100,
-        kabushHeight            : 3.62
+        kabushHeight            : 4.09,
+        // Firefliers
+        firefliesCount          : 60,
+        firefliesSize           : 100,
+        firefliesColor          : "#c6d775",
+        firefliesNoiseStrength  : 1.34
     };
     
     constructor() {        
@@ -100,22 +111,6 @@ export default class Debug {
             this.kabushMaretial.uniforms.uAnimationSpeed.value = this.defaultOptions.animationSpeed;
         });
         
-        
-        this.animateButton = { animate : () => { 
-            // Reset shader time
-            this.portalLightMaterial.uniforms.uTime.value = 0; 
-            this.kabushMaretial.uniforms.uTime.value      = 0; 
-        }}        
-        this.debugPortalShow.add(this.animateButton, 'animate').name("Open StarGate");
-
-        this.animateButton2 = { animate2 : () => { 
-            // Set shader time to 1 minute, so the close animation starts
-            this.portalLightMaterial.uniforms.uTime.value = 60; 
-            this.kabushMaretial.uniforms.uTime.value      = 60; 
-        }}
-        
-        this.debugPortalShow.add(this.animateButton2, 'animate2').name("Close StarGate");
-
         /*
          * Light Wave animation
          */
@@ -160,12 +155,51 @@ export default class Debug {
             console.log(this.experience.renderer.bloomPass.strength);
         });
         
+        // Firefliers folder
+        this.debugFirefliers = this.gui.addFolder("Firefliers").open(false);
         // Firefliers size
-        this.gui.add(this.firefliesMaretial.uniforms.uSize, 'value').min(0.0).max(500).step(1).name('fireFliesSize');
+        this.debugFirefliers.add(this.defaultOptions, 'firefliesSize').min(0.0).max(500).step(1).onChange(() => {
+            this.firefliesMaretial.uniforms.uSize.value = this.defaultOptions.firefliesSize;
+        });
+        
+        // Firefliers count
+        this.debugFirefliers.add(this.defaultOptions, "firefliesCount").min(5).max(1000).step(1).onChange(() => {
+            this.experience.world.fireFliers.setup(this.defaultOptions.firefliesCount);
+        });
+        // Firefliers color
+        this.debugFirefliers.addColor(this.defaultOptions, 'firefliesColor').onChange(() => { 
+            this.firefliesMaretial.uniforms.uColor.value = new THREE.Color(this.defaultOptions.firefliesColor);
+        })
+        // Firefliers noise strength
+        this.debugFirefliers.add(this.defaultOptions, "firefliesNoiseStrength").min(0.01).max(10).step(0.01).onChange(() => {
+            this.firefliesMaretial.uniforms.uNoiseStrength.value = this.defaultOptions.firefliesNoiseStrength;
+        });
+        
 
+
+        /////////////
+        // GENERAL
         this.gui.addColor(this.defaultOptions, 'clearColor').onChange(() => { 
             this.experience.renderer.instance.setClearColor(this.defaultOptions.clearColor); 
         })
+
+        
+        this.animateButton = { animate : () => { 
+            // Reset shader time
+            this.portalLightMaterial.uniforms.uTime.value = 0; 
+            this.kabushMaretial.uniforms.uTime.value      = 0; 
+        }}        
+        this.gui.add(this.animateButton, 'animate').name("Open Portal");
+
+        this.animateButton2 = { animate2 : () => { 
+            // Set shader time to 1 minute, so the close animation starts
+            this.portalLightMaterial.uniforms.uTime.value = 60; 
+            this.kabushMaretial.uniforms.uTime.value      = 60; 
+        }}
+        
+        this.gui.add(this.animateButton2, 'animate2').name("Close Portal");
+
+
 
     }
 }

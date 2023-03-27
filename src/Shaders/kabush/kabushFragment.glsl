@@ -30,6 +30,12 @@ void main() {
     float distanceToCenter = distance(gl_PointCoord, vec2(0.5)) * 2.0;
     float strength = (0.05 / distanceToCenter - 0.1) * curTime;
 
+    // make the initial colors dark, ath the end all are white, and i think they are more than 1.0, 
+    // maybe 3 or more to say something... xD
+//    vec3 colorStart = mix(vec3(0, 0, 0), uColorStart, 0.3);
+//    vec3 colorEnd = mix(vec3(0, 0, 0), uColorEnd, 0.3);
+//    vec3 color = mix(colorStart, colorEnd, clampTime);
+
     vec3 color = mix(uColorStart, uColorEnd, clampTime);
 
     gl_FragColor = vec4(color, strength * vVisible);
