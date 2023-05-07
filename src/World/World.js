@@ -120,15 +120,15 @@ export default class World {
 
     // updates bloom on each frame
     updateBloom() {
-        const time  = this.getPortalTime();
-        const delay = this.portal.portalLightMaterial.uniforms.uAnimationDelay.value;
-        const speed = this.portal.portalLightMaterial.uniforms.uAnimationSpeed.value;
+        let time  = this.getPortalTime();
+        let delay = this.portal.portalLightMaterial.uniforms.uAnimationDelay.value;
+        let speed = this.portal.portalLightMaterial.uniforms.uAnimationSpeed.value;
 
         if (time < 1.0 + delay ||  time < 61.0) {
             // clampTime after delay its 0 and then comes to one with the time
-            const clampTime  = Math.clamp(((time - delay) * speed), 0.0, 1.0);
+            let clampTime  = Math.clamp(((time - delay) * speed), 0.0, 1.0);
             // use the same cubic-bezier values of the kabush to start
-            const bloomStart = Math.cubicBezier(0.0, 0.0, 1.4, 1, clampTime);
+            let bloomStart = Math.cubicBezier(0.0, 0.0, 1.4, 1, clampTime);
             // if time its below 60 its because portal its open
             if (time < 60.0) {
                 // apply strength
@@ -163,7 +163,7 @@ export default class World {
             this.updateBloom();
 
             if (++this.debugCounter >= 60 * 5 || this.debugCounter < 0) {
-                const time = this.getPortalTime();
+                let time = this.getPortalTime();
                 // if time its less than 0 time uniforms are corrupted, so they need to be set to 0 again
                 // happens some times when i have two more portal tabs form diferent sources (codepen , devildrey33.es, localhost)
                 if (time < 0) {
